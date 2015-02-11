@@ -1,6 +1,11 @@
 package me.kevint.flipIt.display;
 
-import me.kevint.flipIt.math.Vector2i;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import java.util.ArrayList;
+
+import me.kevint.flipIt.entity.Entity;
+import me.kevint.flipIt.entity.component.GraphicsComponent;
 
 public class Surface {
 	
@@ -15,15 +20,13 @@ public class Surface {
 	
 	public int width;
 	public int height;
-	public Vector2i tileSize;
+	public Rectangle tileSize;
 	
-	public SpriteSheet sheet;
+	public ArrayList<Entity> entities = new ArrayList<Entity>();
 	
-	public Surface(int width, int height, Vector2i sprite_size, SpriteSheet sheet) {
+	public Surface(int width, int height) {
 		this.width = width;
 		this.height= height;
-		this.tileSize = sprite_size;
-		this.sheet = sheet;
 		
 		/*for(int i=0 ; i < MAP_WIDTH * MAP_WIDTH; i++) {
 			colors[i*4+0] = 0xff00ff;
@@ -33,16 +36,23 @@ public class Surface {
 		}*/
 	}
 	
-	public void render(int[] pixels, int offset, int row) {
-		for(int yTile = yOffset; yTile <= (yOffset + height); yTile++) {
+	public void render(Graphics2D screen) {
+		for(Entity entity : entities) {
+			if(entity.hasComponentType(GraphicsComponent.class)) {
+				screen.drawImage(entity.getComponentByType(GraphicsComponent.class).getImage(), entity.getX(), entity.getY(), null);
+			} else {
+				//TODO warn entity on surface has no graphics component
+			}
+		}
+		/*for(int yTile = yOffset; yTile <= (yOffset + height); yTile++) {
 			int yMin = yTile * tileSize.getY() - yOffset;
 			int yMax = yMin + tileSize.getY();
 			if(yMin < 0) yMin = 0;
 			if(yMax > height) yMax = height;
 			
 			for(int xTile = xOffset; xTile <= (xOffset + width); xTile++) {
-				int xMin = xTile * tileSize.getY() - xOffset;
-				int xMax = xMin + tileSize.getY();
+				int xMin = xTile * tileSize.getX() - xOffset;
+				int xMax = xMin + tileSize.getX();
 				if(xMin < 0) xMin = 0;
 				if(xMax > height) xMax = width;
 				
@@ -59,6 +69,6 @@ public class Surface {
 					}
 				}
 			}
-		}
+		}*/
 	}
 }

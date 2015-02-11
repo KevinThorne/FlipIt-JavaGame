@@ -2,18 +2,15 @@ package me.kevint.flipIt;
 
 import java.awt.BorderLayout;
 import java.awt.Canvas;
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.image.BufferStrategy;
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferInt;
+import java.util.TreeMap;
 
 import javax.swing.JFrame;
 
 import me.kevint.flipIt.display.SpriteSheet;
 import me.kevint.flipIt.display.Surface;
-import me.kevint.flipIt.math.Vector2i;
 
 /**
  * Insert type description here
@@ -40,12 +37,11 @@ public class FlipIt extends Canvas implements Runnable{
 	private boolean running = false;
 	private int tickCounter = 0;
 	
-	private BufferedImage image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
-	private int[] pixels = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
-	
 	private SpriteSheet spriteSheet = new SpriteSheet("/player_sheet.png");
 	
 	private Surface surface;
+	
+	
 	
 	public FlipIt() {
 		setMinimumSize(new Dimension(WIDTH*SCALE, HEIGHT*SCALE));
@@ -66,7 +62,7 @@ public class FlipIt extends Canvas implements Runnable{
 	}
 	
 	public void init() {
-		surface = new Surface(WIDTH, HEIGHT, new Vector2i(8,8), new SpriteSheet("/player_sheet.png"));
+		surface = new Surface(WIDTH, HEIGHT);
 	}
 	
 	public synchronized void start() {
@@ -138,15 +134,15 @@ public class FlipIt extends Canvas implements Runnable{
 			return;
 		}
 		
-		surface.render(pixels, 0, WIDTH);
+		Graphics2D g = (Graphics2D) bs.getDrawGraphics();
 		
-		Graphics g = bs.getDrawGraphics();
+		
 		
 		//g.setColor(Color.BLACK);
 		g.fillRect(0, 0, getWidth(), getHeight());
 		
 		
-		g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
+		//g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
 		
 		g.dispose();
 		bs.show();

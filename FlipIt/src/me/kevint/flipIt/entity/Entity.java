@@ -1,5 +1,6 @@
 package me.kevint.flipIt.entity;
 
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -11,6 +12,8 @@ public abstract class Entity
     private ArrayList<Component> componentList;
     private UUID entityUUID;
     private int renderLayer;
+    
+    private int x = 0, y = 0;
     
     public Entity(int renderLayer, Component[] componentsToRegister)
     {
@@ -33,6 +36,16 @@ public abstract class Entity
         return this.entityUUID;
     }
     
+    public int getX() {
+    	return x;
+    }
+    public int getY() {
+    	return y;
+    }
+    
+    public Point getLocation() {
+    	return new Point(x,y);
+    }
     public int getRenderLayer()
     {
         return this.renderLayer;
