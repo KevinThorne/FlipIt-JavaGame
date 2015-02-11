@@ -2,18 +2,23 @@ package me.kevint.flipIt;
 
 import java.awt.BorderLayout;
 import java.awt.Canvas;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.image.BufferStrategy;
-import java.util.TreeMap;
+import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
-import me.kevint.flipIt.display.SpriteSheet;
+import me.kevint.flipIt.display.Screen;
 import me.kevint.flipIt.display.Surface;
+import me.kevint.flipIt.display.SurfaceUpdateListener;
+import me.kevint.flipIt.entity.PlayerEntity;
+import me.kevint.flipIt.math.Rect;
 
 /**
- * Insert type description here
+ * FlipIt2D Game Object Class
  *
  * @author kevint <br>
  *			Created Feb 9, 2015 <br> <br>
@@ -30,17 +35,16 @@ public class FlipIt extends Canvas implements Runnable{
 	public static final int HEIGHT = WIDTH / 12 * 9;
 	public static final int SCALE = 3;
 	public static final int FPS = 60;
-	public static final String NAME = "FlipIt2d";
+	public static final String NAME = "FlipIt2D";
+	
+	public static ArrayList<SurfaceUpdateListener> updateListeners = new ArrayList<SurfaceUpdateListener>();
 	
 	private JFrame frame;
 
 	private boolean running = false;
 	private int tickCounter = 0;
 	
-	private SpriteSheet spriteSheet = new SpriteSheet("/player_sheet.png");
-	
-	private Surface surface;
-	
+	private Screen screen;
 	
 	
 	public FlipIt() {
@@ -62,7 +66,13 @@ public class FlipIt extends Canvas implements Runnable{
 	}
 	
 	public void init() {
-		surface = new Surface(WIDTH, HEIGHT);
+		PlayerEntity player = new PlayerEntity(0, new Point(150,150));
+		Surface surface = new Surface();
+		surface.blit(player);
+		screen = new Screen();
+		screen.blit(surface, 0);
+		
+		//TODO load level
 	}
 	
 	public synchronized void start() {
@@ -107,12 +117,12 @@ public class FlipIt extends Canvas implements Runnable{
 			
 			if(forceRender) {
 				frames++;
-				render();
+				render(screen);
 			}
 			
 			if(System.currentTimeMillis() - lastTimer > 1000) {
 				lastTimer += 1000;
-				//System.out.println(frames+ ", " + ticks);
+				System.out.println("Ticks: "+ticks+ ", Frames: " + frames);
 				frames = 0;
 				ticks = 0;
 			}
@@ -122,29 +132,30 @@ public class FlipIt extends Canvas implements Runnable{
 	public void update() { // game tick
 		
 		tickCounter++;
-		surface.xOffset++;
 		
+		for(SurfaceUpdateListener listener : updateListeners) {
+			listener.onUpdate();
+		}
 		
 	}
 	
-	public void render() {
+	public void render(Screen screen) {
 		BufferStrategy bs = getBufferStrategy();
 		if (bs == null) {
 			createBufferStrategy(3);
 			return;
 		}
 		
-		Graphics2D g = (Graphics2D) bs.getDrawGraphics();
+		Graphics2D g2 = (Graphics2D) bs.getDrawGraphics();
+
+		g2.setColor(Color.WHITE);
+		g2.fillRect(0, 0, getWidth(), getHeight());
 		
-		
-		
-		//g.setColor(Color.BLACK);
-		g.fillRect(0, 0, getWidth(), getHeight());
-		
+		screen.render(g2);
 		
 		//g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
 		
-		g.dispose();
+		g2.dispose();
 		bs.show();
 	}
 	

@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+@Deprecated
 public class SpriteSheet {
 	
 	public String path;

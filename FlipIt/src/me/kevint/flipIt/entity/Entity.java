@@ -13,7 +13,7 @@ public abstract class Entity
     private UUID entityUUID;
     private int renderLayer;
     
-    private int x = 0, y = 0;
+    private Point pos;
     
     public Entity(int renderLayer, Component[] componentsToRegister)
     {
@@ -36,16 +36,14 @@ public abstract class Entity
         return this.entityUUID;
     }
     
-    public int getX() {
-    	return x;
-    }
-    public int getY() {
-    	return y;
-    }
+    public Point getPosition() {
+		return pos;
+	}
+	
+	public void setPosition(Point newPos) {
+		this.pos = newPos;
+	}
     
-    public Point getLocation() {
-    	return new Point(x,y);
-    }
     public int getRenderLayer()
     {
         return this.renderLayer;
