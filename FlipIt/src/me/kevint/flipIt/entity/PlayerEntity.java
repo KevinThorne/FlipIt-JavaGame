@@ -1,22 +1,31 @@
 package me.kevint.flipIt.entity;
 
 import java.awt.Point;
+import java.awt.event.KeyEvent;
 
 import me.kevint.flipIt.entity.component.Component;
 import me.kevint.flipIt.entity.component.GraphicsComponent;
 import me.kevint.flipIt.entity.component.GraphicsComponent.AnimationType;
+import me.kevint.flipIt.entity.component.PhysicsComponent;
+import me.kevint.flipIt.entity.component.InputComponent;
+import me.kevint.flipIt.input.KeyMapping;
 import me.kevint.flipIt.math.Rect;
 
 public class PlayerEntity extends Entity{
 	
-	private Rect size;
 
 	public PlayerEntity(int renderLayer, Point pos) {
 		super(renderLayer, new Component[] {
-				new GraphicsComponent("player_sheet.png", false, new Rect(0,0,19,23))
+				new GraphicsComponent("player_sheet.png", true, new Rect(0,0,24,23)),
+				new InputComponent(new KeyMapping[]{new KeyMapping(KeyEvent.VK_LEFT, "moveLeft", "stopMotion"),
+													new KeyMapping(KeyEvent.VK_RIGHT, "moveRight", "stopMotion"),
+													new KeyMapping(KeyEvent.VK_SPACE, "jump")
+				}),
+				new PhysicsComponent(1)
 		});
 		setPosition(pos);
-		this.size = new Rect(0,0,20,22);
+		size = new Rect(0,0,24,23);
+		collisionBounds = size;
 	}
 	
 	public Rect[] getAnimation(AnimationType type) { // all tile coord relative
@@ -47,6 +56,32 @@ public class PlayerEntity extends Entity{
 					};
 		}
 		return null;
+	}
+	
+	@Override
+	public void moveLeft() {
+		setPosition(new Point(getPosition().x-3, getPosition().y));
+		this.getComponentByType(GraphicsComponent.class).setAnimation(AnimationType.MOVE);
+		this.getComponentByType(GraphicsComponent.class).setDirection(false);
+		this.getComponentByType(PhysicsComponent.class).increaseAngularVelocity();
+		this.getComponentByType(PhysicsComponent.class).setMotionStopped(false);
+	}
+	@Override
+	public void moveRight() {
+		setPosition(new Point(getPosition().x+3, getPosition().y));
+		this.getComponentByType(GraphicsComponent.class).setAnimation(AnimationType.MOVE);
+		this.getComponentByType(GraphicsComponent.class).setDirection(true);
+		this.getComponentByType(PhysicsComponent.class).increaseAngularVelocity();
+		this.getComponentByType(PhysicsComponent.class).setMotionStopped(false);
+	}
+	
+	public void stopMotion() {
+		this.getComponentByType(GraphicsComponent.class).setAnimation(AnimationType.STILL);
+		this.getComponentByType(PhysicsComponent.class).setMotionStopped(true);
+	}
+	
+	public void jump() {
+		this.getComponentByType(PhysicsComponent.class).jump();
 	}
 
 }

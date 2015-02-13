@@ -39,7 +39,7 @@ public class FlipIt extends Canvas implements Runnable{
 	
 	public static ArrayList<SurfaceUpdateListener> updateListeners = new ArrayList<SurfaceUpdateListener>();
 	
-	private JFrame frame;
+	private static JFrame frame;
 
 	private boolean running = false;
 	private int tickCounter = 0;
@@ -65,6 +65,10 @@ public class FlipIt extends Canvas implements Runnable{
 		frame.setVisible(true);
 	}
 	
+	public static JFrame getJFrame() {
+		return frame;
+	}
+	
 	public void init() {
 		PlayerEntity player = new PlayerEntity(0, new Point(150,150));
 		Surface surface = new Surface();
@@ -77,7 +81,9 @@ public class FlipIt extends Canvas implements Runnable{
 	
 	public synchronized void start() {
 		running = true;
-		new Thread(this).start();
+		Thread th = new Thread(this);
+		th.setDaemon(true);
+		th.start();
 	}
 	public synchronized void stop() {
 		running = false;
