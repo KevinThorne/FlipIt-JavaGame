@@ -4,8 +4,8 @@ import me.kevint.flipIt.entity.component.Component;
 
 public class ObjectEntity extends Entity{
 
-	public ObjectEntity(int renderLayer, Component[] componentsToRegister) {
-		super(renderLayer, componentsToRegister);
+	public ObjectEntity(Component[] componentsToRegister) {
+		super(componentsToRegister, null);
 	}
 
 }

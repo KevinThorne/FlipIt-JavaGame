@@ -15,7 +15,7 @@ import me.kevint.flipIt.display.Screen;
 import me.kevint.flipIt.display.Surface;
 import me.kevint.flipIt.display.SurfaceUpdateListener;
 import me.kevint.flipIt.entity.PlayerEntity;
-import me.kevint.flipIt.math.Rect;
+import me.kevint.flipIt.layout.LevelBuilder;
 
 /**
  * FlipIt2D Game Object Class
@@ -70,10 +70,12 @@ public class FlipIt extends Canvas implements Runnable{
 	}
 	
 	public void init() {
-		PlayerEntity player = new PlayerEntity(0, new Point(150,150));
-		Surface surface = new Surface();
-		surface.blit(player);
 		screen = new Screen();
+		Surface surface = new Surface(screen);
+		LevelBuilder builder = new LevelBuilder(screen, surface);
+		builder.loadLevel(null);
+		PlayerEntity player = new PlayerEntity(new Point(150,150));
+		surface.blit(player);
 		screen.blit(surface, 0);
 		
 		//TODO load level
@@ -142,6 +144,8 @@ public class FlipIt extends Canvas implements Runnable{
 		for(SurfaceUpdateListener listener : updateListeners) {
 			listener.onUpdate();
 		}
+		
+		
 		
 	}
 	

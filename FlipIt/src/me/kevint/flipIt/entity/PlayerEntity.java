@@ -14,16 +14,15 @@ import me.kevint.flipIt.math.Rect;
 public class PlayerEntity extends Entity{
 	
 
-	public PlayerEntity(int renderLayer, Point pos) {
-		super(renderLayer, new Component[] {
+	public PlayerEntity(Point pos) {
+		super(new Component[] {
 				new GraphicsComponent("player_sheet.png", true, new Rect(0,0,24,23)),
 				new InputComponent(new KeyMapping[]{new KeyMapping(KeyEvent.VK_LEFT, "moveLeft", "stopMotion"),
 													new KeyMapping(KeyEvent.VK_RIGHT, "moveRight", "stopMotion"),
 													new KeyMapping(KeyEvent.VK_SPACE, "jump")
 				}),
 				new PhysicsComponent(1)
-		});
-		setPosition(pos);
+		}, pos);
 		size = new Rect(0,0,24,23);
 		collisionBounds = size;
 	}
@@ -63,7 +62,7 @@ public class PlayerEntity extends Entity{
 		setPosition(new Point(getPosition().x-3, getPosition().y));
 		this.getComponentByType(GraphicsComponent.class).setAnimation(AnimationType.MOVE);
 		this.getComponentByType(GraphicsComponent.class).setDirection(false);
-		this.getComponentByType(PhysicsComponent.class).increaseAngularVelocity();
+		this.getComponentByType(PhysicsComponent.class).increaseHorizontalIntertia();
 		this.getComponentByType(PhysicsComponent.class).setMotionStopped(false);
 	}
 	@Override
@@ -71,7 +70,7 @@ public class PlayerEntity extends Entity{
 		setPosition(new Point(getPosition().x+3, getPosition().y));
 		this.getComponentByType(GraphicsComponent.class).setAnimation(AnimationType.MOVE);
 		this.getComponentByType(GraphicsComponent.class).setDirection(true);
-		this.getComponentByType(PhysicsComponent.class).increaseAngularVelocity();
+		this.getComponentByType(PhysicsComponent.class).increaseHorizontalIntertia();
 		this.getComponentByType(PhysicsComponent.class).setMotionStopped(false);
 	}
 	

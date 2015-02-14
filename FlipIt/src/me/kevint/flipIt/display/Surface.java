@@ -11,7 +11,10 @@ public class Surface {
 	
 	public ArrayList<Entity> entities = new ArrayList<Entity>();
 	
-	public Surface() {
+	private Screen parent;
+	
+	public Surface(Screen parent) {
+		this.parent = parent;
 	}
 	
 	public void blit(Entity entity) {
@@ -28,8 +31,8 @@ public class Surface {
 	public Graphics2D render(Graphics2D screen) {
 		for(Entity entity : entities) {
 			if(entity.hasComponentType(GraphicsComponent.class)) {
-				screen.drawImage(entity.getComponentByType(GraphicsComponent.class).getImage(), entity.getPosition().x,
-						entity.getPosition().y, null);
+				screen.drawImage(entity.getComponentByType(GraphicsComponent.class).getImage(), entity.getPosition().x - parent.getCameraPos().x,
+						entity.getPosition().y - parent.getCameraPos().y, null);
 			} else {
 				//TODO warn entity on surface has no graphics component
 			}

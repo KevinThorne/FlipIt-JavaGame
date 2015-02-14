@@ -16,15 +16,13 @@ public abstract class Entity
 {
     private ArrayList<Component> componentList;
     private UUID entityUUID;
-    private int renderLayer;
     
     private Point pos;
     protected Rect size;
     protected Rect collisionBounds;
     
-    public Entity(int renderLayer, Component[] componentsToRegister)
+    public Entity(Component[] componentsToRegister, Point pos)
     {
-        this.renderLayer = renderLayer;
         this.componentList = new ArrayList<Component>();
         this.entityUUID = UUID.randomUUID();
         
@@ -36,6 +34,7 @@ public abstract class Entity
         {
             component.initialize();
         }
+        setPosition(pos);
     }
     
     public UUID getUUID()
@@ -56,11 +55,6 @@ public abstract class Entity
 	public Rect getCollisionBounds() {
 		return this.collisionBounds;
 	}
-    
-    public int getRenderLayer()
-    {
-        return this.renderLayer;
-    }
     
     public void registerSurfaceUpdateListener(SurfaceUpdateListener ear) {
     	if(!FlipIt.updateListeners.contains(ear)) {

@@ -2,18 +2,29 @@ package me.kevint.flipIt.entity.component;
 
 import me.kevint.flipIt.display.SurfaceUpdateListener;
 
+/**
+ * Adds <b>linear</b> physical properties to the entity.
+ * 
+ * Parabolic physical properties will come later
+ *
+ * @author kevint <br>
+ *			Created Feb 13, 2015 <br> <br>
+ * Copyright 2015
+ */
 public class PhysicsComponent extends Component implements SurfaceUpdateListener{
 	
 	private float upwardVelocity;
 	private int mass;
 	
-	private float horizontalVelocity = 0;
-	private float horizontalMaxVelocity = 1.75f;
+	private float horizontalInertia = 0;
+	private float horizontalMaxInertia;
+	private float friction = 0.1f;
 	
 	private boolean motionStopped = true;
 
 	public PhysicsComponent(int mass) {
 		this.mass = mass;
+		this.horizontalMaxInertia = mass + 0.75f;
 	}
  	
 	@Override
@@ -33,12 +44,12 @@ public class PhysicsComponent extends Component implements SurfaceUpdateListener
 		upwardVelocity = 10;
 	}
 	
-	public void increaseAngularVelocity() {
-		if(this.horizontalVelocity <= this.horizontalMaxVelocity)
-			this.horizontalVelocity++;
+	public void increaseHorizontalIntertia() {
+		if(this.horizontalInertia <= this.horizontalMaxInertia)
+			this.horizontalInertia++;
 	}
-	public void resetAngularVelocity() {
-		this.horizontalVelocity = 0;
+	public void resetHorizontalInertia() {
+		this.horizontalInertia = 0;
 	}
 	
 	public void setMotionStopped(boolean bool) {
@@ -52,22 +63,20 @@ public class PhysicsComponent extends Component implements SurfaceUpdateListener
 			upwardVelocity = upwardVelocity - mass;
 		}
 		if(motionStopped) {
-			if(this.horizontalVelocity != 0)
+			if(this.horizontalInertia != 0)
 				if(this.getParentEntity().getComponentByType(GraphicsComponent.class) != null) {
 					if(this.getParentEntity().getComponentByType(GraphicsComponent.class).getDirection()) {
-						System.out.println("Sliding - " + this.horizontalVelocity);
-						this.getParentEntity().slideHorz(horizontalVelocity);
+						this.getParentEntity().slideHorz(horizontalInertia);
 					} else {
-						System.out.println("Sliding - " + this.horizontalVelocity);
-						this.getParentEntity().slideHorz(-horizontalVelocity);
+						this.getParentEntity().slideHorz(-horizontalInertia);
 					}
 				}
 		
-			if(this.horizontalVelocity > 0) {
-				this.horizontalVelocity = this.horizontalVelocity - 0.1f;
+			if(this.horizontalInertia > 0) {
+				this.horizontalInertia = this.horizontalInertia - friction;
 			}
-			if(this.horizontalVelocity <= 0) {
-				this.resetAngularVelocity();
+			if(this.horizontalInertia <= 0) {
+				this.resetHorizontalInertia();
 			}
 		}
 	}
