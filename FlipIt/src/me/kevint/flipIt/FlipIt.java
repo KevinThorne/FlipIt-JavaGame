@@ -5,7 +5,6 @@ import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
 
@@ -37,7 +36,7 @@ public class FlipIt extends Canvas implements Runnable{
 	public static final int FPS = 60;
 	public static final String NAME = "FlipIt2D";
 	
-	public static ArrayList<SurfaceUpdateListener> updateListeners = new ArrayList<SurfaceUpdateListener>();
+	public static ArrayList<SurfaceUpdateListener> surfaceUpdateListeners = new ArrayList<SurfaceUpdateListener>();
 	
 	private static JFrame frame;
 
@@ -74,7 +73,7 @@ public class FlipIt extends Canvas implements Runnable{
 		Surface surface = new Surface(screen);
 		LevelBuilder builder = new LevelBuilder(screen, surface);
 		builder.loadLevel(null);
-		PlayerEntity player = new PlayerEntity(new Point(150,150));
+		PlayerEntity player = new PlayerEntity(builder.getSpawnPoint());
 		surface.blit(player);
 		screen.blit(surface, 0);
 		
@@ -141,7 +140,7 @@ public class FlipIt extends Canvas implements Runnable{
 		
 		tickCounter++;
 		
-		for(SurfaceUpdateListener listener : updateListeners) {
+		for(SurfaceUpdateListener listener : surfaceUpdateListeners) {
 			listener.onUpdate();
 		}
 		

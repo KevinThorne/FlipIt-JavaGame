@@ -8,8 +8,6 @@ import me.kevint.flipIt.FlipIt;
 import me.kevint.flipIt.display.SurfaceUpdateListener;
 import me.kevint.flipIt.entity.component.Component;
 import me.kevint.flipIt.entity.component.ComponentPriorityEnum;
-import me.kevint.flipIt.entity.component.GraphicsComponent;
-import me.kevint.flipIt.entity.component.GraphicsComponent.AnimationType;
 import me.kevint.flipIt.math.Rect;
 
 public abstract class Entity
@@ -57,8 +55,8 @@ public abstract class Entity
 	}
     
     public void registerSurfaceUpdateListener(SurfaceUpdateListener ear) {
-    	if(!FlipIt.updateListeners.contains(ear)) {
-    		FlipIt.updateListeners.add(ear);
+    	if(!FlipIt.surfaceUpdateListeners.contains(ear)) {
+    		FlipIt.surfaceUpdateListeners.add(ear);
     	}
     }
     
@@ -107,17 +105,11 @@ public abstract class Entity
         return null;
     }
     
-    public void moveLeft() {
-		setPosition(new Point(getPosition().x-1, getPosition().y));
+	public void move(Point deltaPos) {
+		setPosition(deltaPos);
 	}
-	public void moveRight() {
-		setPosition(new Point(getPosition().x+1, getPosition().y));
-	}
-	public void moveVert(float upwardVelocity) {
-		setPosition(new Point(getPosition().x, (int) (getPosition().y-upwardVelocity)));
-	}
-	public void slideHorz(float steps) {
-		setPosition(new Point((int) (getPosition().x+steps), getPosition().y));
+	public void bump(Point deltaPos) {
+		setPosition(deltaPos);
 	}
     
 }

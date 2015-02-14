@@ -13,15 +13,20 @@ public class LevelBuilder {
 	public static String[] TEST_LAYOUT = new String[]{
 		"wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww",
 		"w                                            w",
-		"w                                            w",
-		"w                                            w",
-		"w                                            w",
-		"w                                            w",
-		"w                                            w",
-		"w                                            w",
-		"w                                            w",
-		"w                                            w",
 		"w p                                          w",
+		"wwwwwwwwww                                   w",
+		"w                                            w",
+		"w                                            w",
+		"w                                            w",
+		"w                                            w",
+		"w                                            w",
+		"w                                            w",
+		"w                                            w",
+		"w                                            w",
+		"w                                            w",
+		"w                                            w",
+		"w                                            w",
+		"w                                            w",
 		"wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww"};
 
 	private String currentLevel;
@@ -29,6 +34,8 @@ public class LevelBuilder {
 	private Surface surface;
 	
 	private ArrayList<Entity> objects = new ArrayList<Entity>();
+	
+	private Point spawnPoint;
 
 	private int scale = 32;
 
@@ -63,8 +70,15 @@ public class LevelBuilder {
 			LayoutEntity ob = new LayoutEntity(this, pos, "wall.png");
 			objects.add(ob);
 			surface.blit(ob);
-		} else {;}
+		} else if(w.equals("p")) {
+			spawnPoint = pos;
+		}
+		else {;}
 
+	}
+	
+	public Point getSpawnPoint() {
+		return spawnPoint;
 	}
 
 

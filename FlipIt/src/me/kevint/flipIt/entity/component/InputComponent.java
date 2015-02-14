@@ -20,6 +20,7 @@ public class InputComponent extends Component implements KeyListener{
 	
 	@Override
 	public void initialize() {
+		FlipIt.getJFrame().getContentPane().getComponent(0).addKeyListener(this);
 		FlipIt.getJFrame().addKeyListener(this);
 	}
 

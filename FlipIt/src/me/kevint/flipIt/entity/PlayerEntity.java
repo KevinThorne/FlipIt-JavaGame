@@ -21,7 +21,7 @@ public class PlayerEntity extends Entity{
 													new KeyMapping(KeyEvent.VK_RIGHT, "moveRight", "stopMotion"),
 													new KeyMapping(KeyEvent.VK_SPACE, "jump")
 				}),
-				new PhysicsComponent(1)
+				new PhysicsComponent(3)
 		}, pos);
 		size = new Rect(0,0,24,23);
 		collisionBounds = size;
@@ -57,24 +57,28 @@ public class PlayerEntity extends Entity{
 		return null;
 	}
 	
-	@Override
 	public void moveLeft() {
-		setPosition(new Point(getPosition().x-3, getPosition().y));
+		this.getComponentByType(PhysicsComponent.class).move(10, Math.toRadians(-180));
+	}
+	public void moveRight() {
+		this.getComponentByType(PhysicsComponent.class).move(10, Math.toRadians(0));
+	}
+	
+	@Override
+	public void move(Point deltaPos) {
+		if(deltaPos == getPosition())
+			return;
+		setPosition(deltaPos);
 		this.getComponentByType(GraphicsComponent.class).setAnimation(AnimationType.MOVE);
 		this.getComponentByType(GraphicsComponent.class).setDirection(false);
-		this.getComponentByType(PhysicsComponent.class).increaseHorizontalIntertia();
-		this.getComponentByType(PhysicsComponent.class).setMotionStopped(false);
-	}
-	@Override
-	public void moveRight() {
-		setPosition(new Point(getPosition().x+3, getPosition().y));
-		this.getComponentByType(GraphicsComponent.class).setAnimation(AnimationType.MOVE);
-		this.getComponentByType(GraphicsComponent.class).setDirection(true);
+		
+		//slide
 		this.getComponentByType(PhysicsComponent.class).increaseHorizontalIntertia();
 		this.getComponentByType(PhysicsComponent.class).setMotionStopped(false);
 	}
 	
 	public void stopMotion() {
+		this.getComponentByType(PhysicsComponent.class).move(0, 0);
 		this.getComponentByType(GraphicsComponent.class).setAnimation(AnimationType.STILL);
 		this.getComponentByType(PhysicsComponent.class).setMotionStopped(true);
 	}
