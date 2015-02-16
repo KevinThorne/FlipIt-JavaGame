@@ -139,7 +139,6 @@ public class FlipIt extends Canvas implements Runnable{
 			if(System.currentTimeMillis() - lastTimer > 1000) {
 				lastTimer += 1000;
 				System.out.println("Ticks: "+ticks+ ", Frames: " + frames);
-				System.out.println("Player: " + this.player.getCollisionBounds().toString());
 				frames = 0;
 				ticks = 0;
 			}

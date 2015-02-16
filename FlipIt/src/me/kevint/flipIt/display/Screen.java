@@ -25,6 +25,7 @@ public class Screen  {
 	
 	public void initQuadTree(Rectangle size) {
 		quad = new QuadTree(0, size);
+		System.out.println("Made a new QuadTree size: " + size.toString());
 	}
 	
 	public Point getCameraPos() {

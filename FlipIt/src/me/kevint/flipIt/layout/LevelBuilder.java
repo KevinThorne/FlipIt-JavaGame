@@ -11,12 +11,12 @@ import me.kevint.flipIt.entity.LayoutEntity;
 public class LevelBuilder {
 
 	public static String[] TEST_LAYOUT = new String[]{
-		"wwwwwwwwwwwwwww",
-		"w             w",
-		"w p           w",
-		"wwwwwwwwww    w",
-		"w             w",
-		"wwwwwwwwwwwwwww"};
+		"wwwwwwwwwwwwwwww",
+		"w              w",
+		"w p            w",
+		"wwwwwwwwww     w",
+		"w              w",
+		"wwwwwwwwwwwwwwww"};
 
 	private String currentLevel;
 	private Screen screen;

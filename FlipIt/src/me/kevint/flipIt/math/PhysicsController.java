@@ -23,15 +23,19 @@ public class PhysicsController implements SurfaceUpdateListener {
 	public void attachComponent(PhysicsComponent c) {
 		if(!attached.contains(c)) {
 			attached.add(c);
-			this.screen.getQuadTree().insert(c);
-			System.out.println("Added " + c.getParentEntity().getClass().getName());
+			//System.out.println("Added " + c.getParentEntity().getClass().getName());
 		}
 	}
 
 	@Override
 	public void onUpdate() {
 		ArrayList<PhysicsComponent> returnObjects = new ArrayList<PhysicsComponent>();
+		//refresh quadtree
+		this.screen.getQuadTree().clear();
 		for(PhysicsComponent comp : attached) {
+			this.screen.getQuadTree().insert(comp);
+			
+			//collision detection
 			returnObjects.clear();
 			this.screen.getQuadTree().retrieve(returnObjects, comp);
 
@@ -43,18 +47,17 @@ public class PhysicsController implements SurfaceUpdateListener {
 				} catch (IndexOutOfBoundsException e) {
 					b = returnObjects.get(0);
 				}
-				if(a.getParentEntity() instanceof PlayerEntity || b.getParentEntity() instanceof PlayerEntity) {
-					System.out.println("Player found");
-				}
-				if(a.getParentEntity().getCollisionBounds().intersects(b.getParentEntity().getCollisionBounds())) {
-					if(a.getParentEntity() instanceof LayoutEntity && b.getParentEntity() instanceof LayoutEntity) {
-						continue;
-					}
-					System.out.println("Collision! With: " + a.getParentEntity().getClass().getName() + " and " + b.getParentEntity().getClass().getName());
+				//System.out.println("Length: " + returnObjects.size() + " Iterating at: " + x + ", " + (x+1));
+				if(a.getParentEntity().getCollisionBounds().intersects(b.getParentEntity().getCollisionBounds()) || 
+						b.getParentEntity().getCollisionBounds().intersects(a.getParentEntity().getCollisionBounds())) {
+					if((!(a.getParentEntity() instanceof LayoutEntity) && !(b.getParentEntity() instanceof LayoutEntity)))
+						System.out.println("Collision! With: " + a.getParentEntity().getClass().getName() + " and " + b.getParentEntity().getClass().getName());
 					if(a.getMass() > b.getMass()) {
 						b.move(0, 0);
+						continue;
 					} else {
 						a.move(0, 0);
+						continue;
 					}
 				}
 			}
