@@ -1,6 +1,7 @@
 package me.kevint.flipIt.entity;
 
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 
 import me.kevint.flipIt.display.Screen;
@@ -10,7 +11,6 @@ import me.kevint.flipIt.entity.component.InputComponent;
 import me.kevint.flipIt.entity.component.PhysicsComponent;
 import me.kevint.flipIt.input.KeyMapping;
 import me.kevint.flipIt.layout.LevelBuilder;
-import me.kevint.flipIt.math.Rect;
 
 public class LayoutEntity extends Entity{
 	
@@ -27,8 +27,8 @@ public class LayoutEntity extends Entity{
 				})
 		}, pos);
 		this.screen = layoutManager.getScreen();
-		size = new Rect(0,0,32,32);
-		collisionBounds = size;
+		size = new Rectangle(0,0,32,32);
+		bounds = new Rectangle(pos.x, pos.y, size.width, size.height);
 	}
 	
 	public void moveLeft() {

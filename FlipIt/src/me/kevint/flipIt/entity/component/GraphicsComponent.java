@@ -1,5 +1,6 @@
 package me.kevint.flipIt.entity.component;
 
+import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
@@ -11,10 +12,9 @@ import me.kevint.flipIt.Constants;
 import me.kevint.flipIt.FlipIt;
 import me.kevint.flipIt.display.SurfaceUpdateListener;
 import me.kevint.flipIt.entity.PlayerEntity;
-import me.kevint.flipIt.math.Rect;
 
 /**
- * Graphics Component used in Surfaces to render
+ * Graphics Component used in Screens to render
  *
  * @author kevint <br>
  *			Created Feb 10, 2015 <br> <br>
@@ -48,7 +48,7 @@ public class GraphicsComponent extends Component implements SurfaceUpdateListene
 	private boolean lookDir; // if its looking right
 	
 	private BufferedImage spriteSheet;
-	private Rect spriteSize;
+	private Rectangle spriteSize;
 	
 	private boolean toAnimate = false;
 	
@@ -66,7 +66,7 @@ public class GraphicsComponent extends Component implements SurfaceUpdateListene
 		}
 	}
 	
-	public GraphicsComponent(String imageName, boolean animated, Rect spriteSize) {
+	public GraphicsComponent(String imageName, boolean animated, Rectangle spriteSize) {
 		this.toAnimate = animated;
 		this.spriteSize = spriteSize;
 		try {
@@ -75,7 +75,7 @@ public class GraphicsComponent extends Component implements SurfaceUpdateListene
 			e.printStackTrace();
 		}
 		if(!animated) {
-			image = spriteSheet.getSubimage(spriteSize.x, spriteSize.y, spriteSize.w, spriteSize.h);
+			image = spriteSheet.getSubimage(spriteSize.x, spriteSize.y, spriteSize.width, spriteSize.height);
 		}
 	}
 
@@ -109,10 +109,10 @@ public class GraphicsComponent extends Component implements SurfaceUpdateListene
 	
 	public BufferedImage getSubImage(int xTile, int yTile) {
 		return this.spriteSheet.getSubimage(
-				xTile * this.spriteSize.w,
-				yTile * this.spriteSize.h,
-				this.spriteSize.w, 
-				this.spriteSize.h);
+				xTile * this.spriteSize.width,
+				yTile * this.spriteSize.height,
+				this.spriteSize.width, 
+				this.spriteSize.height);
 	}
 	
 	public BufferedImage flipImage(BufferedImage img) {

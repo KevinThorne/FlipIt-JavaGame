@@ -5,16 +5,18 @@ import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
 import me.kevint.flipIt.display.Screen;
-import me.kevint.flipIt.display.Surface;
 import me.kevint.flipIt.display.SurfaceUpdateListener;
+import me.kevint.flipIt.entity.LayoutEntity;
 import me.kevint.flipIt.entity.PlayerEntity;
 import me.kevint.flipIt.layout.LevelBuilder;
+import me.kevint.flipIt.math.PhysicsController;
 
 /**
  * FlipIt2D Game Object Class
@@ -44,6 +46,9 @@ public class FlipIt extends Canvas implements Runnable{
 	private int tickCounter = 0;
 	
 	private Screen screen;
+
+	private PlayerEntity player;
+	private static PhysicsController physicsControl;
 	
 	
 	public FlipIt() {
@@ -67,15 +72,19 @@ public class FlipIt extends Canvas implements Runnable{
 	public static JFrame getJFrame() {
 		return frame;
 	}
+	public static PhysicsController getPhysicsControl() {
+		return physicsControl;
+	}
 	
 	public void init() {
 		screen = new Screen();
-		Surface surface = new Surface(screen);
-		LevelBuilder builder = new LevelBuilder(screen, surface);
+		
+		physicsControl = new PhysicsController(screen);
+		
+		LevelBuilder builder = new LevelBuilder(screen);
 		builder.loadLevel(null);
-		PlayerEntity player = new PlayerEntity(builder.getSpawnPoint());
-		surface.blit(player);
-		screen.blit(surface, 0);
+		this.player = new PlayerEntity(builder.getSpawnPoint());
+		screen.blit(player, 0);
 		
 		//TODO load level
 	}
@@ -130,6 +139,7 @@ public class FlipIt extends Canvas implements Runnable{
 			if(System.currentTimeMillis() - lastTimer > 1000) {
 				lastTimer += 1000;
 				System.out.println("Ticks: "+ticks+ ", Frames: " + frames);
+				System.out.println("Player: " + this.player.getCollisionBounds().toString());
 				frames = 0;
 				ticks = 0;
 			}

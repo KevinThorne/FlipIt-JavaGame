@@ -1,6 +1,8 @@
 package me.kevint.flipIt.entity;
 
+import java.awt.Dimension;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -8,16 +10,14 @@ import me.kevint.flipIt.FlipIt;
 import me.kevint.flipIt.display.SurfaceUpdateListener;
 import me.kevint.flipIt.entity.component.Component;
 import me.kevint.flipIt.entity.component.ComponentPriorityEnum;
-import me.kevint.flipIt.math.Rect;
 
 public abstract class Entity
 {
     private ArrayList<Component> componentList;
     private UUID entityUUID;
     
-    private Point pos;
-    protected Rect size;
-    protected Rect collisionBounds;
+    protected Rectangle size;
+    protected Rectangle bounds = new Rectangle();
     
     public Entity(Component[] componentsToRegister, Point pos)
     {
@@ -41,17 +41,17 @@ public abstract class Entity
     }
     
     public Point getPosition() {
-		return pos;
+		return bounds.getLocation();
 	}
 	
 	public void setPosition(Point newPos) {
-		this.pos = newPos;
+		this.bounds.setLocation(newPos);
 	}
-	public Rect getSize() {
-		return size;
+	public Dimension getSize() {
+		return this.bounds.getSize();
 	}
-	public Rect getCollisionBounds() {
-		return this.collisionBounds;
+	public Rectangle getCollisionBounds() {
+		return this.bounds;
 	}
     
     public void registerSurfaceUpdateListener(SurfaceUpdateListener ear) {

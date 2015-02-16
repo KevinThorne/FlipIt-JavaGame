@@ -2,6 +2,7 @@ package me.kevint.flipIt.entity.component;
 
 import java.awt.Point;
 
+import me.kevint.flipIt.FlipIt;
 import me.kevint.flipIt.display.SurfaceUpdateListener;
 
 /**
@@ -38,6 +39,7 @@ public class PhysicsComponent extends Component implements SurfaceUpdateListener
 	@Override
 	public void initialize() {
 		this.getParentEntity().registerSurfaceUpdateListener(this);
+		FlipIt.getPhysicsControl().attachComponent(this);
 	}
 	
 	public void move(float speed, double angleInRadians) {
@@ -93,5 +95,8 @@ public class PhysicsComponent extends Component implements SurfaceUpdateListener
 			}
 		}
 	}
-
+	
+	public int getMass() {
+		return mass;
+	}
 }
