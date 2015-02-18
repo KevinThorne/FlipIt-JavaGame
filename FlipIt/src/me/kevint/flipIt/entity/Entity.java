@@ -109,7 +109,7 @@ public abstract class Entity
 		setPosition(deltaPos);
 	}
 	public void bump(Point deltaPos) {
-		setPosition(deltaPos);
+		setPosition(new Point(getPosition().x+deltaPos.x, getPosition().y + deltaPos.y));
 	}
     
 }

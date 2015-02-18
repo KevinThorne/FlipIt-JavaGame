@@ -88,9 +88,9 @@ public class PhysicsComponent extends Component implements SurfaceUpdateListener
 			if(this.horizontalInertia != 0)
 				if(this.getParentEntity().getComponentByType(GraphicsComponent.class) != null) {
 					if(this.getParentEntity().getComponentByType(GraphicsComponent.class).getDirection()) {
-						this.getParentEntity().bump(new Point((int) horizontalInertia, 0 ));
+						this.getParentEntity().bump(new Point((int) horizontalInertia, 0));
 					} else {
-						this.getParentEntity().bump(new Point((int) -horizontalInertia, 0 ));
+						this.getParentEntity().bump(new Point( - (int) horizontalInertia, 0));
 					}
 				}
 		

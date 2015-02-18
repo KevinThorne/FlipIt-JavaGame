@@ -68,10 +68,17 @@ public class PlayerEntity extends Entity{
 	
 	@Override
 	public void move(Point deltaPos) {
-		System.out.println("Player pos: " + getPosition().toString() + " deltaPos: " + deltaPos.toString());
+		if(deltaPos.equals(getPosition())) {
+			stopMotion();
+			return;
+		}
+		if(deltaPos.x > getPosition().x) {
+			this.getComponentByType(GraphicsComponent.class).setDirection(true);
+		} else {
+			this.getComponentByType(GraphicsComponent.class).setDirection(false);
+		}
 		setPosition(deltaPos);
 		this.getComponentByType(GraphicsComponent.class).setAnimation(AnimationType.MOVE);
-		this.getComponentByType(GraphicsComponent.class).setDirection(false);
 		
 		//slide
 		this.getComponentByType(PhysicsComponent.class).increaseHorizontalIntertia();
