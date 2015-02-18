@@ -1,9 +1,12 @@
 package me.kevint.flipIt.entity.component;
 
 import java.awt.Point;
+import java.awt.Rectangle;
 
 import me.kevint.flipIt.FlipIt;
 import me.kevint.flipIt.display.SurfaceUpdateListener;
+import me.kevint.flipIt.entity.LayoutEntity;
+import me.kevint.flipIt.entity.PlayerEntity;
 
 /**
  * Adds <b>linear</b> physical properties to the entity.
@@ -68,8 +71,20 @@ public class PhysicsComponent extends Component implements SurfaceUpdateListener
 	
 	//jump
 	public void jump() {
-		move(10, Math.toRadians(90));
-		inAir = true;
+		if(!inAir ) {
+			move(10, Math.toRadians(90));
+			inAir = true;
+		}
+	}
+	
+	public void collision(PhysicsComponent who, Rectangle intersection) {
+		if(this.getParentEntity() instanceof PlayerEntity )  { //TODO fix nastiness
+			if(who.getParentEntity() instanceof LayoutEntity) {
+				//this.getParentEntity().move(new Point((this.getParentEntity().getPosition().x - ((int) intersection.x)), 
+				//		  					(this.getParentEntity().getPosition().y - ((int) intersection.y))));
+				stop();
+			}
+		}
 	}
 	
 	@Override
@@ -78,7 +93,8 @@ public class PhysicsComponent extends Component implements SurfaceUpdateListener
 			this.getParentEntity().move(new Point((this.getParentEntity().getPosition().x + ((int) horizontalVelocity)), 
 												  (this.getParentEntity().getPosition().y + ((int) verticalVelocity))));
 		if(inAir) {
-			;
+			this.verticalVelocity = this.verticalVelocity - mass;
+			
 		}
 		
 		//slide

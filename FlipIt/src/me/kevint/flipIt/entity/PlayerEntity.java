@@ -13,12 +13,15 @@ import me.kevint.flipIt.input.KeyMapping;
 
 public class PlayerEntity extends Entity{
 	
+	public boolean noClip = true;
 
 	public PlayerEntity(Point pos) {
 		super(new Component[] {
 				new GraphicsComponent("player_sheet.png", true, new Rectangle(0,0,24,23)),
 				new InputComponent(new KeyMapping[]{new KeyMapping(KeyEvent.VK_LEFT, "moveLeft", "stopMotion"),
 													new KeyMapping(KeyEvent.VK_RIGHT, "moveRight", "stopMotion"),
+													new KeyMapping(KeyEvent.VK_UP, "moveUp", "stopMotion"),
+													new KeyMapping(KeyEvent.VK_DOWN, "moveDown", "stopMotion"),
 													new KeyMapping(KeyEvent.VK_SPACE, "jump")
 				}),
 				new PhysicsComponent(3)
@@ -65,6 +68,18 @@ public class PlayerEntity extends Entity{
 		this.getComponentByType(GraphicsComponent.class).setDirection(true);
 		this.getComponentByType(PhysicsComponent.class).move(5, Math.toRadians(0));
 	}
+	public void moveUp() {
+		if(noClip) {
+			this.getComponentByType(GraphicsComponent.class).setDirection(false);
+			this.getComponentByType(PhysicsComponent.class).move(5, Math.toRadians(270));
+		}
+	}
+	public void moveDown() {
+		if(noClip) {
+			this.getComponentByType(GraphicsComponent.class).setDirection(true);
+			this.getComponentByType(PhysicsComponent.class).move(5, Math.toRadians(90));
+		}
+	}
 	
 	@Override
 	public void move(Point deltaPos) {
@@ -81,8 +96,10 @@ public class PlayerEntity extends Entity{
 		this.getComponentByType(GraphicsComponent.class).setAnimation(AnimationType.MOVE);
 		
 		//slide
-		this.getComponentByType(PhysicsComponent.class).increaseHorizontalIntertia();
-		this.getComponentByType(PhysicsComponent.class).setMotionStopped(false);
+		if(!noClip) {
+			this.getComponentByType(PhysicsComponent.class).increaseHorizontalIntertia();
+			this.getComponentByType(PhysicsComponent.class).setMotionStopped(false);
+		}
 	}
 	
 	public void stopMotion() {

@@ -1,12 +1,11 @@
 package me.kevint.flipIt.math;
 
+import java.awt.Rectangle;
 import java.util.ArrayList;
 
 import me.kevint.flipIt.FlipIt;
 import me.kevint.flipIt.display.Screen;
 import me.kevint.flipIt.display.SurfaceUpdateListener;
-import me.kevint.flipIt.entity.LayoutEntity;
-import me.kevint.flipIt.entity.PlayerEntity;
 import me.kevint.flipIt.entity.component.PhysicsComponent;
 
 public class PhysicsController implements SurfaceUpdateListener {
@@ -27,6 +26,7 @@ public class PhysicsController implements SurfaceUpdateListener {
 		}
 	}
 
+
 	@Override
 	public void onUpdate() {
 		ArrayList<PhysicsComponent> returnObjects = new ArrayList<PhysicsComponent>();
@@ -39,25 +39,16 @@ public class PhysicsController implements SurfaceUpdateListener {
 			returnObjects.clear();
 			this.screen.getQuadTree().retrieve(returnObjects, comp);
 
-			for (int x = 0; x < returnObjects.size(); x++) {
-				PhysicsComponent a = returnObjects.get(x);
-				PhysicsComponent b;
-				try {
-					b = returnObjects.get(x+1);
-				} catch (IndexOutOfBoundsException e) {
-					b = returnObjects.get(0);
-				}
-				//System.out.println("Length: " + returnObjects.size() + " Iterating at: " + x + ", " + (x+1));
-				if(a.getParentEntity().getCollisionBounds().intersects(b.getParentEntity().getCollisionBounds()) || 
-						b.getParentEntity().getCollisionBounds().intersects(a.getParentEntity().getCollisionBounds())) {
-					if((!(a.getParentEntity() instanceof LayoutEntity) && !(b.getParentEntity() instanceof LayoutEntity)))
-						System.out.println("Collision! With: " + a.getParentEntity().getClass().getName() + " and " + b.getParentEntity().getClass().getName());
-					if(a.getMass() > b.getMass()) {
-						b.move(0, 0);
-						continue;
-					} else {
-						a.move(0, 0);
-						continue;
+			for (PhysicsComponent a : returnObjects) {
+				for(int i=returnObjects.indexOf(a)+1; i<returnObjects.size(); i++) {
+					PhysicsComponent b = returnObjects.get(i);
+					Rectangle intersection = new Rectangle();
+					if(MathUtil.intersection(a.getParentEntity().getCollisionBounds(), b.getParentEntity().getCollisionBounds(), intersection)
+							|| MathUtil.intersection(b.getParentEntity().getCollisionBounds(), a.getParentEntity().getCollisionBounds(), intersection)) {
+						//if((!(a.getParentEntity() instanceof LayoutEntity) && !(b.getParentEntity() instanceof LayoutEntity)))
+							//System.out.println("Collision! With: " + a.getParentEntity().getClass().getName() + " and " + b.getParentEntity().getClass().getName());
+						a.collision(b, intersection);
+						b.collision(a, intersection);
 					}
 				}
 			}
