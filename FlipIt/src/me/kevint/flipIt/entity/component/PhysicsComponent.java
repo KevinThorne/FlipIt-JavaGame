@@ -49,8 +49,6 @@ public class PhysicsComponent extends Component implements SurfaceUpdateListener
 	}
 	
 	public void stop() {
-		//this.horizontalVelocity = 0;
-		//this.verticalVelocity = 0;
 		move(0,0);
 	}
 	
