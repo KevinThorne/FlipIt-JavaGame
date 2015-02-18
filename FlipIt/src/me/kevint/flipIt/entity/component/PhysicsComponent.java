@@ -80,9 +80,10 @@ public class PhysicsComponent extends Component implements SurfaceUpdateListener
 	public void collision(PhysicsComponent who, Rectangle intersection) {
 		if(this.getParentEntity() instanceof PlayerEntity )  { //TODO fix nastiness
 			if(who.getParentEntity() instanceof LayoutEntity) {
-				//this.getParentEntity().move(new Point((this.getParentEntity().getPosition().x - ((int) intersection.x)), 
-				//		  					(this.getParentEntity().getPosition().y - ((int) intersection.y))));
-				stop();
+				this.getParentEntity().bump(new Point((this.getParentEntity().getPosition().x - ((int) intersection.x)), 
+						  					(this.getParentEntity().getPosition().y - ((int) intersection.y))));
+				//stop();
+				allowMotion = false;
 			}
 		}
 	}
@@ -90,8 +91,10 @@ public class PhysicsComponent extends Component implements SurfaceUpdateListener
 	@Override
 	public void onUpdate() { 
 		//if((int) horizontalVelocity != 0 || (int) verticalVelocity != 0)
+		if(allowMotion)
 			this.getParentEntity().move(new Point((this.getParentEntity().getPosition().x + ((int) horizontalVelocity)), 
 												  (this.getParentEntity().getPosition().y + ((int) verticalVelocity))));
+		allowMotion = true;
 		if(inAir) {
 			this.verticalVelocity = this.verticalVelocity - mass;
 			
