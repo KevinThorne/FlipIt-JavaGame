@@ -58,16 +58,21 @@ public class PlayerEntity extends Entity{
 	}
 	
 	public void moveLeft() {
-		this.getComponentByType(PhysicsComponent.class).move(1, Math.toRadians(-180));
+		this.getComponentByType(GraphicsComponent.class).setDirection(false);
+		this.getComponentByType(PhysicsComponent.class).move(5, Math.toRadians(-180));
 	}
 	public void moveRight() {
-		this.getComponentByType(PhysicsComponent.class).move(1, Math.toRadians(0));
+		this.getComponentByType(GraphicsComponent.class).setDirection(true);
+		this.getComponentByType(PhysicsComponent.class).move(5, Math.toRadians(0));
 	}
 	
 	@Override
 	public void move(Point deltaPos) {
-		if(deltaPos == getPosition())
+		System.out.println("Player pos: " + getPosition().toString() + " deltaPos: " + deltaPos.toString());
+		if(deltaPos.equals(getPosition())) {
+			stopMotion();
 			return;
+		}
 		setPosition(deltaPos);
 		this.getComponentByType(GraphicsComponent.class).setAnimation(AnimationType.MOVE);
 		this.getComponentByType(GraphicsComponent.class).setDirection(false);
@@ -78,9 +83,9 @@ public class PlayerEntity extends Entity{
 	}
 	
 	public void stopMotion() {
-		this.getComponentByType(PhysicsComponent.class).move(0, 0);
 		this.getComponentByType(GraphicsComponent.class).setAnimation(AnimationType.STILL);
 		this.getComponentByType(PhysicsComponent.class).setMotionStopped(true);
+		this.getComponentByType(PhysicsComponent.class).stop();
 	}
 	
 	public void jump() {

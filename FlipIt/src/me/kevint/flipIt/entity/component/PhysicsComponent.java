@@ -27,7 +27,7 @@ public class PhysicsComponent extends Component implements SurfaceUpdateListener
 	
 	private boolean motionStopped = true;
 	
-	private boolean allowMotion = true;
+	public boolean allowMotion = false;
 	
 	private boolean inAir = false;
 
@@ -46,6 +46,12 @@ public class PhysicsComponent extends Component implements SurfaceUpdateListener
 		this.horizontalVelocity = (speed * (Math.cos(angleInRadians)));
 		this.verticalVelocity = (speed * (Math.sin(angleInRadians)));
 		
+	}
+	
+	public void stop() {
+		//this.horizontalVelocity = 0;
+		//this.verticalVelocity = 0;
+		//move(0,0);
 	}
 	
 	//slide
@@ -69,9 +75,11 @@ public class PhysicsComponent extends Component implements SurfaceUpdateListener
 	}
 	
 	@Override
-	public void onUpdate() {
-		this.getParentEntity().move(new Point((this.getParentEntity().getPosition().x + ((int) horizontalVelocity)), 
-											  (this.getParentEntity().getPosition().y + ((int) verticalVelocity))));
+	public void onUpdate() { 
+		//if((int) horizontalVelocity != 0 || (int) verticalVelocity != 0)
+		if(allowMotion)
+			this.getParentEntity().move(new Point((this.getParentEntity().getPosition().x + ((int) horizontalVelocity)), 
+												  (this.getParentEntity().getPosition().y + ((int) verticalVelocity))));
 		if(inAir) {
 			;
 		}
